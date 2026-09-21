@@ -1,0 +1,4 @@
+# Kebutuhan library JATI.AI
+groq>=1.0.0            # SDK resmi Groq API
+python-dotenv>=1.0.0   # membaca API key dari file .env
+streamlit>=1.36.0      # tampilan web chatbot

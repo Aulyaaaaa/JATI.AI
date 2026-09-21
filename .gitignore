@@ -1,0 +1,21 @@
+# JANGAN pernah unggah API key / secrets
+.env
+.env.*
+
+# Riwayat percakapan
+riwayat/*.json
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+.ipynb_checkpoints/
+
+# Logs
+*.log
+
+# Editor & OS
+.vscode/
+.DS_Store

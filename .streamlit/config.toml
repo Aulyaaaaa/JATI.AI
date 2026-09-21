@@ -1,0 +1,10 @@
+# Tema dasar Streamlit mengikuti visual identity JATI.AI
+[theme]
+base = "light"
+primaryColor = "#173F2F"
+backgroundColor = "#F6F4EC"
+secondaryBackgroundColor = "#FFFFFF"
+textColor = "#22332B"
+
+[server]
+headless = true

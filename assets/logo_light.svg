@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Logo JATI.AI versi terang">
+  <title>JATI.AI</title>
+  <!-- Daun pada ujung atas huruf J -->
+  <path d="M35 17 C36 7 44 2 54 3 C55 13 48 19 36 18 Z" fill="#DCE8D4"/>
+  <path d="M38 16.5 C43 13.5 48 9.5 52 6" fill="none" stroke="#FFFFFF" stroke-width="1.6"
+        stroke-linecap="round" opacity="0.75"/>
+  <!-- Akar halus di bawah kait huruf J -->
+  <path d="M23 47 C19 49 17 53 16 57" fill="none" stroke="#FFFFFF" stroke-width="3"
+        stroke-linecap="round" opacity="0.9"/>
+  <path d="M27 48 C27 52 26 55 24 58" fill="none" stroke="#FFFFFF" stroke-width="2.4"
+        stroke-linecap="round" opacity="0.8"/>
+  <!-- Batang huruf J -->
+  <path d="M34 15 L34 38 C34 45 29 48 23 47" fill="none" stroke="#FFFFFF" stroke-width="7"
+        stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
