@@ -142,73 +142,6 @@ Pertanyaan di luar ketiga ranah tersebut (misalnya tugas kuliah umum, gosip, ata
 
 ---
 
-## 7. Arsitektur dan Alur Kerja
-
-Seluruh logika inti berada di `jati_core.py`, sehingga versi console dan versi web berbagi otak yang sama. Antarmuka (`app.py` dan `chatbot_console.py`) hanya mengurus tampilan, input, dan penyimpanan `messages`.
-
-```mermaid
-flowchart TD
-    A([Pertanyaan pengguna]) --> B["Antarmuka menambahkan ke messages<br/>(role: user)"]
-    B --> C["potong_history()<br/>system prompt + 12 pesan terakhir"]
-    C --> D["Groq API<br/>stream_jawaban() atau kirim_pesan()"]
-    D -->|berhasil| E["Jawaban tampil bertahap"]
-    E --> F["Antarmuka menambahkan ke messages<br/>(role: assistant)"]
-    F --> G([Konteks untuk giliran berikutnya])
-    D -->|gagal| H["JatiError dengan pesan ramah<br/>dari _pesan_error()"]
-    H --> I["Antarmuka menampilkan peringatan<br/>dan membuang pertanyaan terakhir"]
-```
-
-### Komponen `jati_core.py`
-
-| Komponen | Fungsi |
-|----------|--------|
-| Konfigurasi | model default dan daftar model, *temperature*, batas token, batas konteks, folder riwayat, palet warna, tagline |
-| `JatiError` | error khusus agar pesan ke pengguna tetap ramah |
-| `muat_api_key()` / `get_client()` | membaca `GROQ_API_KEY` dari environment atau `.env`, lalu membuat client Groq satu kali saja |
-| `SYSTEM_PROMPT` | instruksi peran JATI.AI: pengguna, topik, gaya menjawab, dan batasan |
-| `reset_history()` | mengembalikan percakapan ke kondisi awal (hanya system prompt) |
-| `potong_history()` | menjaga system prompt dan hanya mengirim 12 pesan terakhir ke API |
-| `kirim_pesan()` | mengirim history ke Groq dan mengembalikan jawaban utuh |
-| `stream_jawaban()` | generator yang mengembalikan jawaban potongan demi potongan |
-| `_pesan_error()` | menerjemahkan error teknis menjadi kalimat yang dimengerti pengguna |
-| `simpan_riwayat()` / `muat_riwayat()` / `daftar_riwayat()` | menyimpan, membuka, dan mendaftar percakapan berformat JSON |
-| `statistik()` | menghitung jumlah pesan, jumlah kata, dan topik dominan |
-
-### Penanganan error
-
-Semua kegagalan API dibungkus menjadi `JatiError`, sehingga antarmuka cukup menangkap satu jenis error.
-
-| Kondisi | Pesan untuk pengguna |
-|---------|----------------------|
-| API key tidak ada | petunjuk membuat file `.env` dan tautan ke <https://console.groq.com/keys> |
-| API key ditolak | meminta pengguna memeriksa isi `.env` |
-| Kuota penuh (rate limit) | meminta menunggu sekitar satu menit |
-| Koneksi bermasalah | meminta memeriksa jaringan lalu mengirim ulang |
-| Model tidak tersedia | meminta mengganti `MODEL_DEFAULT` dengan model terbaru |
-| Error lain | pesan gangguan beserta detail dari server |
-
-Saat gagal, antarmuka membuang pertanyaan terakhir dari `messages` sehingga riwayat percakapan tidak rusak dan pengguna bisa langsung mencoba lagi.
-
-### Format berkas riwayat
-
-Percakapan disimpan di `riwayat/*.json`:
-
-```json
-{
-  "aplikasi": "JATI.AI",
-  "disimpan_pada": "2026-09-21T10:30:00",
-  "jumlah_pesan": 4,
-  "messages": [
-    { "role": "system", "content": "..." },
-    { "role": "user", "content": "..." },
-    { "role": "assistant", "content": "..." }
-  ]
-}
-```
-
-- `jumlah_pesan` tidak menghitung system prompt.
-- `muat_riwayat()` juga menerima berkas berformat list biasa.
-- Percakapan lama yang dimuat selalu memakai **system prompt versi terbaru**.
 
 ### Statistik percakapan
 
@@ -216,7 +149,7 @@ Percakapan disimpan di `riwayat/*.json`:
 
 ---
 
-## 8. Desain System Prompt
+## 7. Desain System Prompt
 
 Kepribadian JATI.AI didefinisikan lewat `SYSTEM_PROMPT` dan terdiri atas lima bagian:
 
@@ -230,7 +163,7 @@ Kepribadian JATI.AI didefinisikan lewat `SYSTEM_PROMPT` dan terdiri atas lima ba
 
 ---
 
-## 9. Konfigurasi dan Parameter
+## 8. Konfigurasi dan Parameter
 
 **Nilai bawaan** (di bagian atas `jati_core.py`):
 
@@ -256,7 +189,7 @@ Kepribadian JATI.AI didefinisikan lewat `SYSTEM_PROMPT` dan terdiri atas lima ba
 
 ---
 
-## 10. Memulai
+## 9. Memulai
 
 ### Prasyarat
 
@@ -330,7 +263,7 @@ python chatbot_console.py
 
 ---
 
-## 11. Contoh Percakapan
+## 10. Contoh Percakapan
 
 ```text
 Anda  > Padi saya menguning di ujung daun, apa penyebabnya?
@@ -363,7 +296,7 @@ pada blok di bawah ini.
 
 ---
 
-## 12. Struktur Proyek
+## 11. Struktur Proyek
 
 ```text
 jati-ai/
@@ -385,7 +318,7 @@ jati-ai/
 
 ---
 
-## 13. Deploy ke Streamlit Community Cloud
+## 12. Deploy ke Streamlit Community Cloud
 
 1. Push proyek ke repository GitHub yang **public**. Pastikan `.env` tidak ikut ter-push.
 2. Buka <https://share.streamlit.io> dan login dengan akun GitHub.
@@ -404,7 +337,7 @@ jati-ai/
 
 ---
 
-## 14. Identitas Visual
+## 13. Identitas Visual
 
 Palet warna didefinisikan di `WARNA` pada `jati_core.py` dan dipakai bersama oleh `app.py` dan console.
 
@@ -425,7 +358,7 @@ Palet warna didefinisikan di `WARNA` pada `jati_core.py` dan dipakai bersama ole
 
 ---
 
-## 15. Keterbatasan dan Penggunaan yang Bertanggung Jawab
+## 14. Keterbatasan dan Penggunaan yang Bertanggung Jawab
 
 - JATI.AI **tidak terhubung** ke data cuaca, harga pasar, atau citra satelit secara real-time.
 - Jawaban dapat keliru. Untuk keputusan penting di lahan, tetap pertimbangkan kondisi lokal dan konsultasikan dengan **penyuluh pertanian setempat** atau sumber resmi seperti **BMKG**.
@@ -436,7 +369,7 @@ Palet warna didefinisikan di `WARNA` pada `jati_core.py` dan dipakai bersama ole
 
 ---
 
-## 16. Pemenuhan Ketentuan Tugas
+## 15. Pemenuhan Ketentuan Tugas
 
 | Ketentuan | Status | Keterangan |
 |-----------|:------:|-----------|
@@ -455,7 +388,7 @@ Palet warna didefinisikan di `WARNA` pada `jati_core.py` dan dipakai bersama ole
 
 ---
 
-## 17. Arah Pengembangan
+## 16. Arah Pengembangan
 
 Gagasan pengembangan berikutnya, sejalan dengan keterbatasan yang sudah diidentifikasi:
 
